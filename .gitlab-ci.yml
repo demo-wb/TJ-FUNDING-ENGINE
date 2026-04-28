@@ -1,0 +1,36 @@
+services:
+  - mysql:8.0
+
+variables:
+  MYSQL_DATABASE: "$TEST_MYSQL_DATABASE"
+  MYSQL_ROOT_PASSWORD: "$TEST_MYSQL_ROOT_PASSWORD"
+  DOCKER_DRIVER: overlay2
+  DOCKER_HOST: tcp://docker:2375
+
+stages:
+  - test
+  - build
+  - deploy
+
+production-test:
+  stage: test
+  environment: production
+  image: node:16.17.0
+  only:
+    - main
+  script:
+    - yarn --frozen-lockfile
+    - yarn run link
+    - yarn eslint
+
+push-test:
+  stage: test
+  environment: test
+  except:
+    - develop
+    - main
+  image: node:16.17.0
+  script:
+    - yarn --frozen-lockfile
+    - yarn run link
+    - yarn eslint
