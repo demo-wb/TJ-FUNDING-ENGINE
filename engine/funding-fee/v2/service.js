@@ -120,13 +120,11 @@ class Service {
   // }
 
   static isCalculateFundingFee(currentTime) {
-    const timeToUpdate = moment(currentTime).utc(false).format('YYYY-MM-DD HH:mm:00');
-    const minute = moment(timeToUpdate).minute();
+    const second = moment(currentTime).second();
 
-    const intervalMinutes = [0, 10, 20, 30, 40, 50];
-
-    return intervalMinutes.includes(minute);
+    return (second % 10 === 0);
 }
+
 
   static async createTransactions(transactions) {
     await Repository.createFuturesAssetTransactions(transactions);
