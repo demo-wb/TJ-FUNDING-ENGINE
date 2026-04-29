@@ -108,23 +108,16 @@ class Service {
     return futuresAssetTransaction;
   }
 
-  // static isCalculateFundingFee(currentTime) {
-  //   const timeToUpdate = moment(currentTime).utc(false).format('YYYY-MM-DD HH:mm:00');
-  //   const hour = moment(timeToUpdate).hour();
-  //   const minute = moment(timeToUpdate).minute();
-
-  //   const timeToCalculateFundingFee = [0, 8, 16];
-  //   const timeOverLapOneMinute = 0;
-
-  //   return timeToCalculateFundingFee.includes(hour) && (timeOverLapOneMinute === minute);
-  // }
-
   static isCalculateFundingFee(currentTime) {
-    const second = moment(currentTime).second();
+    const timeToUpdate = moment(currentTime).utc(false).format('YYYY-MM-DD HH:mm:00');
+    const hour = moment(timeToUpdate).hour();
+    const minute = moment(timeToUpdate).minute();
 
-    return (second % 10 === 0);
-}
+    const timeToCalculateFundingFee = [0, 8, 16];
+    const timeOverLapOneMinute = 0;
 
+    return timeToCalculateFundingFee.includes(hour) && (timeOverLapOneMinute === minute);
+  }
 
   static async createTransactions(transactions) {
     await Repository.createFuturesAssetTransactions(transactions);
